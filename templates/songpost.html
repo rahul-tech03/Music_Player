@@ -1,0 +1,13 @@
+{%extends 'layout.html'%}
+{% block css%}
+<link rel="stylesheet" href="static/play.css">
+{% endblock %}
+{% block body %}
+<div class="cantainer">
+    <h1>this is {{song.song_name}} song</h1>
+    <!-- <audio controls src="media/{{song.song}}" type="audio/mp3"></audio> -->
+    <audio controls>
+        <source src="media/{{song.song}}" type="audio/mp3">
+    </audio>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block css %}
+<link rel="stylesheet" href="static/play.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+  <h2 style="padding-top: 4%; padding-left: 7%; color: white; font-weight: bold; font-size: 2.3em; text-align: center;">Your Playlist</h2>
+
+  {% if song_list %}
+  {% for playlist in song_list reversed %}
+  <div class="card mb-3"
+    style="max-width: 540px; margin-top: 3%; margin-left: 30%; border: rgb(224, 204, 230) solid 3px; color: white; background-color: rgb(7, 1, 4);">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="/media/{{ playlist.song.image }}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ playlist.song.song_name }}</h5>
+          <p class="card-text">Singer : {{ playlist.song.artist }}</p>
+          <p class="card-text">Tag : {{ playlist.song.tags }}</p>
+          <div class="listen-later" style="display: flex;">
+            <a style="height: 37px;" href="{% url 'play' playlist.song.song_id %}" type="submit"
+              class="btn btn-primary">Play</a>
+
+              <form action="{% url 'remove_from_playlist' playlist.song.song_id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" style="margin-left: 1rem;">remove</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p style="padding-left: 7%; color: white;">No songs in playlist</p>
+  {% endif %}
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+  // Your additional JavaScript logic can go here
+</script>
+{% endblock %}

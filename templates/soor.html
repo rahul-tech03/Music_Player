@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musico</title>
+    <link rel="stylesheet" href="/static/navbr.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body style="background: linear-gradient(45deg,#f9feff,#202629,#6b46ab,#e96518);">
+    <nav style="background: linear-gradient(45deg,#e96518,#020708);">
+        <div class="logo">
+            <li><img src="/static/images/logo.jpg" alt="SonicVista">Musico</li>
+        </div>
+        <!-- Update the search form in your navigation bar -->
+        <div class="search">
+            <form class="d-flex" role="search" method="GET" action="{% url 'search' %}">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" style="color: white;">
+                <h5>Categories</h5>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="song/">All song</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="hindisongs/">Hindi Songs</a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">English Songs</a>
+
+            </div>
+        </div>
+
+        <div class="auth">
+            <ul>
+                <li><a href="/login" style="color: white; text-decoration: none;">Login</a></li>
+                <li><a href="/signup" style="color: white; text-decoration: none;">Sign up</a></li>
+            </ul>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" style="color: white;">
+                Welcome, {{ request.user }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="/listenlater/">Listen Later</a>
+                <a class="dropdown-item" href="/favorites/">Your Favorites</a>
+                <a class="dropdown-item" href="/playlist/">Your Playlist</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+
+            </div>
+        </div>
+        {% endif %}
+    </nav>
+
+    <!-- cards -->
+    <!-- Trending Songs -->
+    <div class="heading" style="display: flex;">
+        <h2 style="padding-top: 4%; padding-left: 7%; color: white;font-weight: bold;
+	font-size: 2.3em;">Songs For You <h3 style="padding-top: 4%; padding-left: 50%;"><a href="/song/"
+                    class="btn btn-primary">see all</a></h3>
+        </h2>
+    </div>
+
+    <div class="row" style="padding-top: 3%; padding-left: 7%; display: flex;">
+
+        {% for i in song|slice:"3" reversed %}
+
+        <div class="card" style="width: 18rem; margin-left: 5%; background-color: white; color: black;">
+            <img src="media/{{i.image}}" class="card-img-top" alt="..." height="250px">
+            <!-- Inside your card body -->
+            <div class="card-body">
+                <h5 class="card-title">{{ i.song_name }}</h5>
+                <p class="card-text">Singer : {{ i.artist }}</p>
+                <p class="card-text">Tag : {{ i.tags }}</p>
+                <div class="btns" style="display: flex;">
+                    <a href="/song/{{i.song_id }}" class="btn btn-primary">Play</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'add_to_listen_later' i.song_id %}"
+                        style="margin-left: 1rem; color: white;background: linear-gradient(45deg,#d617a7, #e96518);"
+                        class="btn btn-secondary">Add to Listen Later</a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+    <!-- HINDI Songs -->
+    <div class="heading" style="display: flex;">
+        <h2 style="padding-top: 4%; padding-left: 7%; color: white;font-weight: bold;
+        font-size: 2.3em;">Hindi Songs <h3 style="padding-top: 4%; padding-left: 50%;"><a href="/hindisongs/"
+                    class="btn btn-primary">see all</a></h3>
+        </h2>
+    </div>
+
+    <div class="row" style="padding-top: 3%; padding-left: 7%; display: flex;">
+
+        {% for i in song %}
+        {% if i.language == 'Hindi'%}
+        {% if forloop.counter <= 3 %} <div class="card"
+            style="width: 18rem; margin-left: 5%; background-color: white; color: black;">
+            <img src="media/{{i.image}}" class="card-img-top" alt="..." height="250px">
+            <!-- Inside your card body -->
+            <div class="card-body">
+                <h5 class="card-title">{{ i.song_name }}</h5>
+                <p class="card-text">Singer : {{ i.artist }}</p>
+                <p class="card-text">Tag : {{ i.tags }}</p>
+                <div class="btns" style="display: flex;">
+                    <a href="/song/{{ i.song_id }}" class="btn btn-primary">Play</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'add_to_listen_later' i.song_id %}"
+                        style="margin-left: 1rem; color: white; background: linear-gradient(45deg,#d617a7, #e96518);"
+                        class="btn btn-secondary">Add to Listen Later</a>
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </div>
+
+
+
+
+    <!-- ENGLISH Songs -->
+    <div class="heading" style="display: flex;">
+        <h2 style="padding-top: 4%; padding-left: 7%; color: white;font-weight: bold; font-size: 2.3em;">
+            English Songs
+            <h3 style="padding-top: 4%; padding-left: 50%;">
+                <a href="/englishsongs/" class="btn btn-primary">see all</a>
+            </h3>
+        </h2>
+    </div>
+
+    <div class="row" style="padding-top: 3%; padding-left: 7%; display: flex;">
+
+        {% with english_counter=0 %}
+        {% for i in song reversed %}
+        {% if i.language == 'English' and english_counter < 3 %} <div class="card"
+            style="width: 18rem; margin-left: 5%; background-color: white; color: black;">
+            <img src="media/{{i.image}}" class="card-img-top" alt="..." height="250px">
+            <!-- Inside your card body -->
+            <div class="card-body">
+                <h5 class="card-title">{{ i.song_name }}</h5>
+                <p class="card-text">Singer : {{ i.artist }}</p>
+                <p class="card-text">Tag : {{ i.tags }}</p>
+                <div class="btns" style="display: flex;">
+                    <a href="/song/{{ i.song_id }}" class="btn btn-primary">Play</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'add_to_listen_later' i.song_id %}"
+                        style="margin-left: 1rem; color: white; background: linear-gradient(45deg,#d617a7, #e96518);"
+                        class="btn btn-secondary">Add to Listen Later</a>
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+    {% with english_counter=english_counter|add:1 %}
+    {% endwith %}
+    {% endif %}
+    {% endfor %}
+    {% endwith %}
+    </div>
+
+
+
+ <!-- PUNJABI Songs -->
+ <div class="heading" style="display: flex;">
+    <h2 style="padding-top: 4%; padding-left: 7%; color: white;font-weight: bold; font-size: 2.3em;">
+        Punjabi Songs
+        <h3 style="padding-top: 4%; padding-left: 50%;">
+            <a href="/englishsongs/" class="btn btn-primary">see all</a>
+        </h3>
+    </h2>
+</div>
+
+<div class="row" style="padding-top: 3%; padding-left: 7%; display: flex;">
+
+    {% with pun_counter=0 %}
+    {% for i in song reversed %}
+    {% if i.language == 'Punjabi' and pun_counter < 3 %} <div class="card"
+        style="width: 18rem; margin-left: 5%; background-color: white; color: black;">
+        <img src="media/{{i.image}}" class="card-img-top" alt="..." height="250px">
+        <!-- Inside your card body -->
+        <div class="card-body">
+            <h5 class="card-title">{{ i.song_name }}</h5>
+            <p class="card-text">Singer : {{ i.artist }}</p>
+            <p class="card-text">Tag : {{ i.tags }}</p>
+            <div class="btns" style="display: flex;">
+                <a href="/song/{{ i.song_id }}" class="btn btn-primary">Play</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'add_to_listen_later' i.song_id %}"
+                    style="margin-left: 1rem; color: white; background: linear-gradient(45deg,#d617a7, #e96518);"
+                    class="btn btn-secondary">Add to Listen Later</a>
+                {% endif %}
+            </div>
+        </div>
+</div>
+{% with pun_counter=pun_counter|add:1 %}
+{% endwith %}
+{% endif %}
+{% endfor %}
+{% endwith %}
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

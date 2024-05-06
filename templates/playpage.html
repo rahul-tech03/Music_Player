@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Musico Songplay</title>
+  <link rel="stylesheet" href="/static/plypage.css">
+</head>
+<body style="background: linear-gradient(45deg,  #e96518,#6b46ab,#202629,#f9feff);">
+ 
+    {% if message %}
+    <script>
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });</Script>
+    {% endif %}
+
+    <div class="main">
+      <div class="player">
+        <div class="imgBx">
+          <img src="/media/{{song.image}}" alt="Luka Chuppi">
+          <h3>{{song.song_name}} by {{song.artist}}</h3>
+          <h4>{{song.tags}}</h4>
+        </div>
+        <audio controls>
+          <source src="/media/{{song.song}}" type="audio/mp3">
+        </audio>
+        {% if user.is_authenticated %}
+        <div class="list" style="display: flex;">
+        <a href="{% url 'add_to_favorite' song.song_id %}"
+            style="margin: 0.3rem; border-radius: 10%; padding: 0.6rem; color: white; text-decoration: none; background: linear-gradient(45deg,#d617a7, #e96518);"
+            class="btn btn-secondary">favorite</a>
+
+        <a href="{% url 'add_to_playlist' song.song_id %}"
+            style="margin: 0.3rem; border-radius: 10%; padding: 0.6rem; color: white; text-decoration: none; background: linear-gradient(45deg,#d617a7, #e96518);"
+            class="btn btn-secondary">Add in playlist</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="goto">
+        <div class="inner">
+          <ul>
+            <li><a href="/soor">HOME</a></li>
+            <li><a href="/song">SONGS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function addToListenLater() {
+      
+      alert("Added to Listen Later!");
+    }
+  </script>
+
+
+
+  </html>
+

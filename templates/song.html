@@ -1,0 +1,43 @@
+{%extends 'layout.html'%}
+{% block css%}
+<link rel="stylesheet" href="static/play.css">
+{% endblock %}
+{% block body %}
+<h2 style="padding-top: 4%; padding-left: 7%; color: white;font-weight: bold; font-size: 2.3em;">
+  All Songs</h2>
+  <div class="cantainer">
+  {% for i in song reversed %}
+  <div class="card mb-3"
+    style="max-width: 540px; margin-top: 3%; margin-left: 30%; border: rgb(224, 204, 230) solid 3px; color: white; background-color: rgb(7, 1, 4);">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="/media/{{i.image}}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{i.song_name}}</h5>
+          <p class="card-text">Singer : {{i.artist}}</p>
+          <p class="card-text">Tag : {{i.tags}}</p>
+          <div class="listenltr" style="display: flex;">
+            <a style="height: 37px;" href="/song/{{i.song_id}}" type="submit" class="btn btn-primary">Play</a>
+          
+            {% if user.is_authenticated %}
+            <a href="{% url 'add_to_listen_later' i.song_id %}" style="margin-left: 3rem; color: white; background: linear-gradient(45deg,#d617a7, #e96518);" class="btn btn-secondary">Add to Listen Later</a>
+            {% endif %}       
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
+{% block javascript%}
+<script>
+  function addToListenLater() {
+    // Add your logic here to handle the "Watch Later" functionality
+    alert("Added to Listen Later!");
+  }
+</script>
+{% endblock %}
